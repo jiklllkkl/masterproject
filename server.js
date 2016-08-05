@@ -17,10 +17,6 @@ fs.readFile(path.join('data', 'stocks.json'), 'utf8', function(err, data) {
 app.use(express.static(__dirname + '/app'));
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
 
-//serving the static HTML
-app.get("/", function (req, res) {
-    res.sendfile("/index.html");
-});
 
 //Sending and receiving data
 io.on('connection', function (socket) {
@@ -38,7 +34,7 @@ io.on('connection', function (socket) {
           running = false;
           return err;
         }
-        fs.readFile(path.join('matlab', 'mostRecentResult.json'), 'utf8', function(err, data) {
+        fs.readFile(path.join('data', 'mostRecentResult.json'), 'utf8', function(err, data) {
           running = false;
           if (err) {
             socket.emit('analysisDone', {error: true});
@@ -53,7 +49,7 @@ io.on('connection', function (socket) {
       if (running) {
         socket.emit('sendResults', {stocks: stocks, running: true, stockUnderAnalysis: stockUnderAnalysis});
       } else {
-        fs.readFile(path.join('matlab', 'mostRecentResult.json'), 'utf8', function(err, data) {
+        fs.readFile(path.join('data', 'mostRecentResult.json'), 'utf8', function(err, data) {
           if (err) {
             socket.emit('sendResults', {error: true});
             return err;
