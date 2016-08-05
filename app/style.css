@@ -1,0 +1,32 @@
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+    display: none !important;
+}
+
+body {
+  background-color: #99ccff;
+}
+.stock-dropdown {
+  width: 300px;
+}
+table {
+  width: 50%;
+  margin: auto;
+  border: 1px solid black;
+  border-spacing: 10px;
+  border-collapse: collapse;
+  margin-top: 25px;
+}
+th, td {
+  border: 1px solid black;
+  padding: 10px;
+  border-collapse: collapse;
+  text-align: center;
+}
+h1 {
+  text-align: center;
+}
