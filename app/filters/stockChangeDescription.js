@@ -2,11 +2,11 @@ app.filter('stockChangeDescription', function() {
   return function(input) {
       switch (input) {
         case -1:
-          return "decrease";
+          return "Decrease";
         case 0:
-          return "stay the same";
+          return "No Change";
         case 1:
-          return  "increase";
+          return  "Increase";
       }
       return input;
   };

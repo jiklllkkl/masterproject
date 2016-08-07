@@ -17,8 +17,7 @@ var sockets = function (io) {
             currentRun.running = true;
             currentRun.stockName = stock.stockName;
             io.sockets.emit('startRunning', {stockName: currentRun.stockName});
-           // exec(`cd matlab & matlab -nodisplay -wait -nosplash -nodesktop -minimize -r dummy('${stock.stockName}')`, function(err, stdout, stdin) {
-            setTimeout(function() { var err = false;
+            exec(`cd matlab & matlab -nodisplay -wait -nosplash -nodesktop -minimize -r dummy('${stock.stockName}')`, function(err, stdout, stdin) {
                 if (err) {
                     socket.emit('analysisDone', {error: true});
                     currentRun.running = false;
@@ -33,7 +32,7 @@ var sockets = function (io) {
                     var result = JSON.parse(data);
                     io.sockets.emit('analysisDone', result);
                 });
-            }, 2000);
+            });
         });
 
         if (currentRun.running) {
