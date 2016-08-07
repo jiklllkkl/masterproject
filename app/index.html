@@ -3,18 +3,13 @@
   <head>
     <title>Regime Switching Model Portfolio</title>
     <link rel="stylesheet" type="text/css" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/style.css">
-
-    <script src="/node_modules/angular/angular.min.js"></script>
-    <script src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/app.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
   </head>
-    <body ng-app="demo" ng-controller="demoController" ng-cloak class="ng-cloak">
+    <body ng-app="stockApp" ng-controller="mainController" ng-cloak class="ng-cloak">
 
       <div class="row" style="margin-top: 40px">
         <div class="col-md-offset-2 col-md-8">
-          <div class="row" ng-if="!loading">
+          <div class="row">
             <div class="col-md-4">
               <div class="btn-group stock-dropdown" uib-dropdown is-open="status.isopen">
                 <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled" ng-model="selectedStock">
@@ -34,7 +29,7 @@
               <div class="jumbotron">
                 <div ng-if="!loading">
                   <h5 class="text-center">Please select a stock and click run</h5>
-                  <h1 ng-if="analyzedStock !== undefined">{{ analyzedStock.stockName }} will {{ analyzedStock.expectedChange }}</h1>
+                  <h1 ng-if="analyzedStock !== undefined">{{ analyzedStock.stockName }} will {{ analyzedStock.rise | stockChangeDescription }}</h1>
                 </div>
                 <div ng-if="loading">
                   <h1>{{ analyzedStock.stockName }} is under analysis, please wait</h1>
@@ -45,5 +40,17 @@
         </div>
       </div>
 
+
+    <!-- Dependencies -->
+    <script src="/node_modules/angular/angular.min.js"></script>
+    <script src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- App -->
+    <script src="/app.js"></script>
+    <script src="/filters/stockChangeDescription.js"></script>
+    <script src="/services/sockets.js"></script>
+    <script src="/controllers/mainController.js"></script>
+    
     </body>
 </html>
