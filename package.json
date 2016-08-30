@@ -8,7 +8,7 @@
     "angular-ui-bootstrap": "^2.0.1",
     "bootstrap": "^3.3.7",
     "express": "latest",
-    "mongoose": "latest",
+    "font-awesome": "^4.6.3",
     "socket.io": "^1.2.0"
   }
 }

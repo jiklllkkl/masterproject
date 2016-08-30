@@ -1,67 +1,14 @@
-var express = require('express');
-var fs = require('fs');
-var app = express();
-const exec = require('child_process').exec;
 const path = require('path');
+var express = require('express');
+var app = express();
+var server = require('http').Server(app);
 
-var io = require('socket.io')(app.listen(3000));
-var running = false;
-var stocks = [];
-var stockUnderAnalysis = "";
+// load server logic
+require('./backend/index')(server, app);
 
-fs.readFile(path.join('data', 'stocks.json'), 'utf8', function(err, data) {
-  stocks = JSON.parse(data);
-});
+// serve front-end static files
+app.use(express.static(path.join(__dirname, 'app')));
+// serve front-end dependencies
+app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 
-//Defining the root directory for static files
-app.use(express.static(__dirname + '/app'));
-app.use('/node_modules', express.static(__dirname + '/node_modules'));
-
-//serving the static HTML
-app.get("/", function (req, res) {
-    res.sendfile("/index.html");
-});
-
-//Sending and receiving data
-io.on('connection', function (socket) {
-    socket.on('runAnalysis', function (stock) {
-      // run the matlab script
-      if (running) {
-        socket.emit('analysisDone', {running: true});
-        return;
-      }
-      running = true;
-      stockUnderAnalysis = stock.stockName;
-      exec(`cd matlab & matlab -nodisplay -wait -nosplash -nodesktop -minimize -r dummy('${stock.stockName}')`, function(err, stdout, stdin) {
-        if (err) {
-          socket.emit('analysisDone', {error: true});
-          running = false;
-          return err;
-        }
-        fs.readFile(path.join('matlab', 'mostRecentResult.json'), 'utf8', function(err, data) {
-          running = false;
-          if (err) {
-            socket.emit('analysisDone', {error: true});
-            return err;
-          }
-          io.sockets.emit('analysisDone', JSON.parse(data));
-        });
-      });
-    });
-
-    socket.on("getResults", function() {
-      if (running) {
-        socket.emit('sendResults', {stocks: stocks, running: true, stockUnderAnalysis: stockUnderAnalysis});
-      } else {
-        fs.readFile(path.join('matlab', 'mostRecentResult.json'), 'utf8', function(err, data) {
-          if (err) {
-            socket.emit('sendResults', {error: true});
-            return err;
-          }
-          data = JSON.parse(data);
-          socket.emit('sendResults', {stocks: stocks, stockName: data.stockName, rise: data.rise, running: false});
-        });
-      }
-    });
-
-});
+server.listen(3000);
