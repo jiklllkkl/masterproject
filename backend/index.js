@@ -1,4 +1,3 @@
-
 module.exports = function(server, app) {
     var io = require('socket.io')(server);
 

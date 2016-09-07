@@ -22,6 +22,11 @@ app.controller('mainController', ['$scope', '$http', 'socket', function($scope, 
       $scope.selectedStock = stock;
     }
 
+    socket.on('analysisDone', function(stock) {
+        $scope.loading = false;
+        $scope.analyzedStock = stock.error ? null : stock;
+    });
+
     socket.on('startRunning', function(data) {
         if (data.error) {
             console.log(data.error);
@@ -29,11 +34,6 @@ app.controller('mainController', ['$scope', '$http', 'socket', function($scope, 
             $scope.loading = true;
             $scope.analyzedStock = {stockName: data.stockName};
         }
-    });
-
-    socket.on('analysisDone', function(stock) {
-        $scope.loading = false;
-        $scope.analyzedStock = stock.error ? null : stock;
     });
 
 }]);

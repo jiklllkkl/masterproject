@@ -17,7 +17,7 @@ var sockets = function (io) {
             currentRun.running = true;
             currentRun.stockName = stock.stockName;
             io.sockets.emit('startRunning', {stockName: currentRun.stockName});
-            exec(`cd matlab & matlab -nodisplay -wait -nosplash -nodesktop -minimize -r dummy('${stock.stockName}')`, function(err, stdout, stdin) {
+            exec(`cd matlab & matlab -nodisplay -wait -nosplash -nodesktop -minimize -r trading_strategy('${stock.stockName}')`, function(err, stdout, stdin) {
                 if (err) {
                     socket.emit('analysisDone', {error: true});
                     currentRun.running = false;
