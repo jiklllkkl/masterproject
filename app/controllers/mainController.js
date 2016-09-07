@@ -1,5 +1,4 @@
-app.controller('mainController', ['$scope', '$http', 'socket', 'stockChangeDescriptionFilter', function($scope, $http, socket, stockChangeDescription) {
-    $scope.stockChangeDescription = stockChangeDescription;
+app.controller('mainController', ['$scope', '$http', 'socket', function($scope, $http, socket) {
     $scope.stocks = [];
     $scope.loading = false;
 
@@ -23,11 +22,6 @@ app.controller('mainController', ['$scope', '$http', 'socket', 'stockChangeDescr
       $scope.selectedStock = stock;
     }
 
-    socket.on('analysisDone', function(stock) {
-        $scope.loading = false;
-        $scope.analyzedStock = stock.error ? null : stock;
-    });
-
     socket.on('startRunning', function(data) {
         if (data.error) {
             console.log(data.error);
@@ -35,6 +29,11 @@ app.controller('mainController', ['$scope', '$http', 'socket', 'stockChangeDescr
             $scope.loading = true;
             $scope.analyzedStock = {stockName: data.stockName};
         }
+    });
+
+    socket.on('analysisDone', function(stock) {
+        $scope.loading = false;
+        $scope.analyzedStock = stock.error ? null : stock;
     });
 
 }]);
